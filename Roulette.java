@@ -115,6 +115,13 @@ public class Roulette
         }
     }
 
+    // Returns the player's balance.
+    public int getBalance()
+    {
+        return balance;
+    }
+
+    /*
     public static void main(String[] args)
     {
         Roulette test = new Roulette(); // Just a little test to make sure everything is working
@@ -130,4 +137,5 @@ public class Roulette
         System.out.print("Balance is: " + test.balance);
         System.out.println();
     }
+    */
 }
