@@ -21,10 +21,13 @@ public class Roulette
         }
     }
 
-    public void addBet(int betPos)  // Bets 5 on the spot
+    public void addBet(int betPos, int betAmount)  // Bets 5 on the spot
     {
-        bets[betPos] += 5;
-        balance -= 5;
+        if(balance >= betAmount)
+        {
+            bets[betPos] += betAmount;
+            balance -= betAmount;
+        }
     }
 
     public int spin()   // Chooses a random number and calculates of the player won

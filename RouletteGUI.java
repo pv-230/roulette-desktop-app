@@ -8,6 +8,14 @@ import java.awt.event.*;
 public class RouletteGUI implements ActionListener
 {
   Roulette game;
+  private JButton[] buttons = new JButton[49];  // Array to store all the buttons
+  protected int betAmount = 5;
+
+  private JPanel contentPane;
+  private JLayeredPane layeredPane;
+  private ImageIcon imageIcon;
+  private JLabel bgLabel, gifLabel, balanceLabel;
+  private CustomPanel customPanel;
 
   /**
    * Default constructor.
@@ -53,12 +61,7 @@ public class RouletteGUI implements ActionListener
    */
   private JPanel buildContentPane()
   {
-    JPanel contentPane;
-    JLayeredPane layeredPane;
-    ImageIcon imageIcon;
-    JLabel bgLabel, gifLabel, balanceLabel;
-    CustomPanel customPanel;
-
+    
     // Sets up the content pane.
     contentPane = new JPanel(new BorderLayout());
     contentPane.setOpaque(true);
@@ -103,8 +106,6 @@ public class RouletteGUI implements ActionListener
                           customPanel.getPreferredSize().height);
     layeredPane.add(customPanel, Integer.valueOf(3));
 
-
-    JButton[] buttons = new JButton[49];  // Array to store all the buttons
     setButtons(buttons);  // Calls the set button function
     
     for(int i = 0; i < 49; i++) // Makes the buttons transparent and adds them to the layered pane
@@ -113,6 +114,11 @@ public class RouletteGUI implements ActionListener
       buttons[i].setContentAreaFilled(false);
       buttons[i].setBorderPainted(false);
       layeredPane.add(buttons[i], Integer.valueOf(4));
+    }
+
+    for(int i = 0; i < 49; i++) // Adds the action listeners
+    {
+      buttons[i].addActionListener(this);
     }
 
     // Adds the layered pane to the content pane.
@@ -162,7 +168,15 @@ public class RouletteGUI implements ActionListener
    */
   public void actionPerformed(ActionEvent e)
   {
-
+    for(int i = 0; i < 49; i++) // Loops through all the buttons
+    {
+      if(e.getSource() == buttons[i]) // Checks the button
+      {
+        game.addBet(i, betAmount);  // Adds the but
+        balanceLabel.setText("Balance: " + game.getBalance());  // Updates the balance label
+        return;
+      }
+    }
   }
 
   /**
