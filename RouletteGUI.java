@@ -103,10 +103,58 @@ public class RouletteGUI implements ActionListener
                           customPanel.getPreferredSize().height);
     layeredPane.add(customPanel, Integer.valueOf(3));
 
+
+    JButton[] buttons = new JButton[49];  // Array to store all the buttons
+    setButtons(buttons);  // Calls the set button function
+    
+    for(int i = 0; i < 49; i++) // Makes the buttons transparent and adds them to the layered pane
+    {
+      buttons[i].setOpaque(false);
+      buttons[i].setContentAreaFilled(false);
+      buttons[i].setBorderPainted(false);
+      layeredPane.add(buttons[i], Integer.valueOf(4));
+    }
+
     // Adds the layered pane to the content pane.
     contentPane.add(layeredPane);
 
     return contentPane;
+  }
+
+  public void setButtons(JButton []buttons) // Creates all the board buttons
+  {
+    for(int i = 0; i < 49; i++) // Creates all the buttons
+    {
+      buttons[i] = new JButton("");
+    }
+
+    buttons[0].setBounds(200,177,40,205);  // Creates the 0 Button
+    int xpos = 245;
+    int buttonNum = 1;
+    for(int i = 0; i < 13; i++) // Creates the 1 - 36, 1st, 2nd, and 3rd buttons
+    {
+      buttons[buttonNum].setBounds(xpos, 317, 40, 65);
+      buttonNum++;
+      buttons[buttonNum].setBounds(xpos,247,40,65);
+      buttonNum++;
+      buttons[buttonNum].setBounds(xpos,177,40,65);
+      buttonNum++;
+      xpos += 45;
+    }
+
+    xpos = 245; // Creates the dozen buttons
+    for(int i = 40; i < 43; i++)
+    {
+      buttons[i].setBounds(xpos,387,175,65);
+      xpos += 180;
+    }
+
+    xpos = 245; // Creates the bottom buttons
+    for(int i = 43; i < 49; i++)
+    {
+      buttons[i].setBounds(xpos,457,85,65);
+      xpos += 90;
+    }
   }
 
   /**
