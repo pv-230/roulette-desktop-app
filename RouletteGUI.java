@@ -297,18 +297,22 @@ public class RouletteGUI implements ActionListener
       // Checks the button
       if(e.getSource() == buttons[i])
       {
-        // Adds the bet
-        game.addBet(i, betAmount);
+        // Checks that they have enough money
+        if(game.getBalance() >= betAmount)
+        {
+          // Adds the bet
+          game.addBet(i, betAmount);
 
-        // Adds the chip image
-        if(betAmount == 1)
-          buttons[i].setIcon(new ImageIcon(RouletteGUI.class.getResource("1.png")));
-        else if(betAmount == 10)
-          buttons[i].setIcon(new ImageIcon(RouletteGUI.class.getResource("10.png")));
-        else if(betAmount == 100)
-          buttons[i].setIcon(new ImageIcon(RouletteGUI.class.getResource("100.png")));
-        else
-          buttons[i].setIcon(new ImageIcon(RouletteGUI.class.getResource("500.png")));
+          // Adds the chip image
+          if(betAmount == 1)
+            buttons[i].setIcon(new ImageIcon(RouletteGUI.class.getResource("1.png")));
+          else if(betAmount == 10)
+            buttons[i].setIcon(new ImageIcon(RouletteGUI.class.getResource("10.png")));
+          else if(betAmount == 100)
+            buttons[i].setIcon(new ImageIcon(RouletteGUI.class.getResource("100.png")));
+          else
+            buttons[i].setIcon(new ImageIcon(RouletteGUI.class.getResource("500.png")));
+        }
           
         // Updates the balance label
         balanceLabel.setText("Balance: " + game.getBalance());
