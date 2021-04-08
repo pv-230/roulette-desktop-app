@@ -9,7 +9,8 @@ public class RouletteGUI implements ActionListener
 {
   Roulette game;
   private JButton[] buttons = new JButton[49];  // Array to store all the buttons
-  protected int betAmount = 5;
+  private JButton chip1, chip10, chip100, chip500, spin, clear;
+  protected int betAmount = 1;
 
   private JPanel contentPane;
   private JLayeredPane layeredPane;
@@ -106,9 +107,11 @@ public class RouletteGUI implements ActionListener
                           customPanel.getPreferredSize().height);
     layeredPane.add(customPanel, Integer.valueOf(3));
 
-    setButtons(buttons);  // Calls the set button function
+    // Calls the set button function
+    setButtons(buttons);
     
-    for(int i = 0; i < 49; i++) // Makes the buttons transparent and adds them to the layered pane
+    // Makes the buttons transparent and adds them to the layered pane
+    for(int i = 0; i < 49; i++)
     {
       buttons[i].setOpaque(false);
       buttons[i].setContentAreaFilled(false);
@@ -116,10 +119,16 @@ public class RouletteGUI implements ActionListener
       layeredPane.add(buttons[i], Integer.valueOf(4));
     }
 
-    for(int i = 0; i < 49; i++) // Adds the action listeners
+    // Adds the action listeners
+    for(int i = 0; i < 49; i++)
     {
       buttons[i].addActionListener(this);
     }
+
+    // Creates the chip buttons
+    chipButtons();
+    // Creates the spin and clear buttons
+    spinClearButtons();
 
     // Adds the layered pane to the content pane.
     contentPane.add(layeredPane);
@@ -127,17 +136,91 @@ public class RouletteGUI implements ActionListener
     return contentPane;
   }
 
-  public void setButtons(JButton []buttons) // Creates all the board buttons
+  // Creates the spin and clear buttons
+  public void spinClearButtons()
   {
-    for(int i = 0; i < 49; i++) // Creates all the buttons
+    // Declares the buttons
+    spin = new JButton("");
+    clear = new JButton("");
+
+    // Sets their sizes
+    spin.setBounds(824,606,200,100);
+    clear.setBounds(624,606,200,100);
+
+    // Sets their pictures
+    spin.setIcon(new ImageIcon(RouletteGUI.class.getResource("spin.png")));
+    clear.setIcon(new ImageIcon(RouletteGUI.class.getResource("clear.png")));
+
+    // Adds the buttons to the layered pane
+    layeredPane.add(spin, Integer.valueOf(4));
+    layeredPane.add(clear, Integer.valueOf(4));
+
+    // Adds the action listener
+    spin.addActionListener(this);
+    clear.addActionListener(this);
+  }
+
+  public void chipButtons()
+  {
+    // Declares the buttons
+    chip1 = new JButton(""); 
+    chip10 = new JButton("");
+    chip100 = new JButton("");
+    chip500 = new JButton("");
+
+    // Sets their positions
+    chip1.setBounds(0,606,100,100);
+    chip10.setBounds(100,606,100,100);
+    chip100.setBounds(200,606,100,100);
+    chip500.setBounds(300,606,100,100);
+
+    // Sets their picture and make the button transparent
+    chip1.setIcon(new ImageIcon(RouletteGUI.class.getResource("1Big.png")));
+    chip1.setOpaque(false);
+    chip1.setContentAreaFilled(false);
+    //chip1.setBorderPainted(false);
+    chip10.setIcon(new ImageIcon(RouletteGUI.class.getResource("10Big.png")));
+    chip10.setOpaque(false);
+    chip10.setContentAreaFilled(false);
+    //chip1.setBorderPainted(false);
+    chip100.setIcon(new ImageIcon(RouletteGUI.class.getResource("100Big.png")));
+    chip100.setOpaque(false);
+    chip100.setContentAreaFilled(false);
+    //chip1.setBorderPainted(false);
+    chip500.setIcon(new ImageIcon(RouletteGUI.class.getResource("500Big.png")));
+    chip500.setOpaque(false);
+    chip500.setContentAreaFilled(false);
+    //chip1.setBorderPainted(false);
+
+    // Adds the buttons
+    layeredPane.add(chip1, Integer.valueOf(4));
+    layeredPane.add(chip10, Integer.valueOf(4));
+    layeredPane.add(chip100, Integer.valueOf(4));
+    layeredPane.add(chip500, Integer.valueOf(4));
+
+    // Adds the action listener
+    chip1.addActionListener(this);
+    chip10.addActionListener(this);
+    chip100.addActionListener(this);
+    chip500.addActionListener(this);
+  }
+
+  // Creates all the board buttons
+  public void setButtons(JButton []buttons)
+  {
+    // Creates all the buttons
+    for(int i = 0; i < 49; i++)
     {
       buttons[i] = new JButton("");
     }
 
-    buttons[0].setBounds(200,177,40,205);  // Creates the 0 Button
+    // Creates the 0 Button
+    buttons[0].setBounds(200,177,40,205);
     int xpos = 245;
     int buttonNum = 1;
-    for(int i = 0; i < 13; i++) // Creates the 1 - 36, 1st, 2nd, and 3rd buttons
+
+    // Creates the 1 - 36, 1st, 2nd, and 3rd buttons
+    for(int i = 0; i < 13; i++)
     {
       buttons[buttonNum].setBounds(xpos, 317, 40, 65);
       buttonNum++;
@@ -148,14 +231,16 @@ public class RouletteGUI implements ActionListener
       xpos += 45;
     }
 
-    xpos = 245; // Creates the dozen buttons
+    // Creates the dozen buttons
+    xpos = 245;
     for(int i = 40; i < 43; i++)
     {
       buttons[i].setBounds(xpos,387,175,65);
       xpos += 180;
     }
 
-    xpos = 245; // Creates the bottom buttons
+    // Creates the bottom buttons
+    xpos = 245; 
     for(int i = 43; i < 49; i++)
     {
       buttons[i].setBounds(xpos,457,85,65);
@@ -168,12 +253,65 @@ public class RouletteGUI implements ActionListener
    */
   public void actionPerformed(ActionEvent e)
   {
-    for(int i = 0; i < 49; i++) // Loops through all the buttons
+    // Changes the bet amount
+    if(e.getSource() == chip1)
+      betAmount = 1;
+    else if(e.getSource() == chip10)
+      betAmount = 10;
+    else if(e.getSource() == chip100)
+      betAmount = 100;
+    else if(e.getSource() == chip500)
+      betAmount = 500;
+    else if(e.getSource() == spin)
     {
-      if(e.getSource() == buttons[i]) // Checks the button
+      // Spins the wheel and pays out
+      game.spin();
+
+      // Removes all the chips from the board
+      for(int i = 0; i < 49; i++)
       {
-        game.addBet(i, betAmount);  // Adds the but
-        balanceLabel.setText("Balance: " + game.getBalance());  // Updates the balance label
+        buttons[i].setIcon(new ImageIcon(RouletteGUI.class.getResource("empty.png")));
+      }
+
+      // Updates the balance label
+      balanceLabel.setText("Balance: " + game.getBalance());
+    }
+    else if(e.getSource() == clear)
+    {
+      // Clears the bets
+      game.clearBets();
+
+      // Removes all the chips from the board
+      for(int i = 0; i < 49; i++)
+      {
+        buttons[i].setIcon(new ImageIcon(RouletteGUI.class.getResource("empty.png")));
+      }
+
+      // Updates the balance label
+      balanceLabel.setText("Balance: " + game.getBalance());
+    }
+
+    // Loops through all the buttons
+    for(int i = 0; i < 49; i++)
+    {
+      // Checks the button
+      if(e.getSource() == buttons[i])
+      {
+        // Adds the bet
+        game.addBet(i, betAmount);
+
+        // Adds the chip image
+        if(betAmount == 1)
+          buttons[i].setIcon(new ImageIcon(RouletteGUI.class.getResource("1.png")));
+        else if(betAmount == 10)
+          buttons[i].setIcon(new ImageIcon(RouletteGUI.class.getResource("10.png")));
+        else if(betAmount == 100)
+          buttons[i].setIcon(new ImageIcon(RouletteGUI.class.getResource("100.png")));
+        else
+          buttons[i].setIcon(new ImageIcon(RouletteGUI.class.getResource("500.png")));
+          
+        // Updates the balance label
+        balanceLabel.setText("Balance: " + game.getBalance());
         return;
       }
     }
