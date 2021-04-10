@@ -184,13 +184,13 @@ public class RouletteGUI implements ActionListener
     chip500 = new JButton("");
 
     // Sets their positions.
-    chip1.setBounds(0,606,100,100);
-    chip10.setBounds(100,606,100,100);
-    chip100.setBounds(200,606,100,100);
-    chip500.setBounds(300,606,100,100);
+    chip1.setBounds(0,598,100,100);
+    chip10.setBounds(100,598,100,100);
+    chip100.setBounds(200,598,100,100);
+    chip500.setBounds(300,598,100,100);
 
     // Sets the button properties.
-    chip1.setIcon(new ImageIcon(getClass().getResource("images/placeholder.png")));
+    chip1.setIcon(new ImageIcon(getClass().getResource("images/1BigSelect.png")));
     chip1.setContentAreaFilled(false);
     chip1.setBorderPainted(false);
     chip10.setIcon(new ImageIcon(getClass().getResource("images/10Big.png")));
@@ -227,10 +227,14 @@ public class RouletteGUI implements ActionListener
 
     // Sets the button properties.
     spin.setIcon(new ImageIcon(getClass().getResource("images/spin.png")));
-    spin.setBounds(824,606,200,100);
+    spin.setBounds(824,598,200,100);
+    spin.setBorderPainted(false);
+    spin.setContentAreaFilled(false);
     spin.setBorderPainted(false);
     clear.setIcon(new ImageIcon(getClass().getResource("images/clear.png")));
-    clear.setBounds(624,606,200,100);
+    clear.setBounds(624,598,200,100);
+    clear.setBorderPainted(false);
+    clear.setContentAreaFilled(false);
     clear.setBorderPainted(false);
 
     // Adds both buttons.
@@ -250,7 +254,7 @@ public class RouletteGUI implements ActionListener
     if (newChip == 1 && newChip != betAmount)
     {
       betAmount = 1;
-      chip1.setIcon(new ImageIcon(getClass().getResource("images/placeholder.png")));
+      chip1.setIcon(new ImageIcon(getClass().getResource("images/1BigSelect.png")));
       chip10.setIcon(new ImageIcon(getClass().getResource("images/10Big.png")));
       chip100.setIcon(new ImageIcon(getClass().getResource("images/100Big.png")));
       chip500.setIcon(new ImageIcon(getClass().getResource("images/500Big.png")));
@@ -259,7 +263,7 @@ public class RouletteGUI implements ActionListener
     {
       betAmount = 10;
       chip1.setIcon(new ImageIcon(getClass().getResource("images/1Big.png")));
-      chip10.setIcon(new ImageIcon(getClass().getResource("images/placeholder.png")));
+      chip10.setIcon(new ImageIcon(getClass().getResource("images/10BigSelect.png")));
       chip100.setIcon(new ImageIcon(getClass().getResource("images/100Big.png")));
       chip500.setIcon(new ImageIcon(getClass().getResource("images/500Big.png")));
     }
@@ -268,7 +272,7 @@ public class RouletteGUI implements ActionListener
       betAmount = 100;
       chip1.setIcon(new ImageIcon(getClass().getResource("images/1Big.png")));
       chip10.setIcon(new ImageIcon(getClass().getResource("images/10Big.png")));
-      chip100.setIcon(new ImageIcon(getClass().getResource("images/placeholder.png")));
+      chip100.setIcon(new ImageIcon(getClass().getResource("images/100BigSelect.png")));
       chip500.setIcon(new ImageIcon(getClass().getResource("images/500Big.png")));
     }
     else if (newChip == 500 && newChip != betAmount)
@@ -277,7 +281,7 @@ public class RouletteGUI implements ActionListener
       chip1.setIcon(new ImageIcon(getClass().getResource("images/1Big.png")));
       chip10.setIcon(new ImageIcon(getClass().getResource("images/10Big.png")));
       chip100.setIcon(new ImageIcon(getClass().getResource("images/100Big.png")));
-      chip500.setIcon(new ImageIcon(getClass().getResource("images/placeholder.png")));
+      chip500.setIcon(new ImageIcon(getClass().getResource("images/500BigSelect.png")));
     }
   }
 
