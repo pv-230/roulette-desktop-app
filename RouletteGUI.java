@@ -339,13 +339,13 @@ public class RouletteGUI implements ActionListener
 
             // Adds the chip image
             if(betAmount == 1)
-              buttons[i].setIcon(new ImageIcon(RouletteGUI.class.getResource("images/1.png")));
+              buttons[i].setIcon(new ImageIcon(getClass().getResource("images/1.png")));
             else if(betAmount == 10)
-              buttons[i].setIcon(new ImageIcon(RouletteGUI.class.getResource("images/10.png")));
+              buttons[i].setIcon(new ImageIcon(getClass().getResource("images/10.png")));
             else if(betAmount == 100)
-              buttons[i].setIcon(new ImageIcon(RouletteGUI.class.getResource("images/100.png")));
+              buttons[i].setIcon(new ImageIcon(getClass().getResource("images/100.png")));
             else
-              buttons[i].setIcon(new ImageIcon(RouletteGUI.class.getResource("images/500.png")));
+              buttons[i].setIcon(new ImageIcon(getClass().getResource("images/500.png")));
           }
             
           // Updates the balance label
