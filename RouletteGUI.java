@@ -28,7 +28,7 @@ public class RouletteGUI implements ActionListener
   private JPanel contentPane;
   private JLayeredPane layeredPane;
   private ImageIcon imageIcon;
-  private JLabel bgLabel, balanceLabel;
+  private JLabel bgLabel, balanceLabel, actionLabel;
 
   /**
    * Default constructor
@@ -101,6 +101,18 @@ public class RouletteGUI implements ActionListener
     balanceLabel.setFont(new Font("Sans Serif", Font.BOLD, 24));
     balanceLabel.setForeground(Color.WHITE);
     layeredPane.add(balanceLabel, Integer.valueOf(1));
+
+    // Adds the action label to the top of the screen.
+    actionLabel = new JLabel("");
+    actionLabel.setPreferredSize(new Dimension(500, 50));
+    actionLabel.setBounds(1024 / 2 - actionLabel.getPreferredSize().width / 2,
+                           90 - actionLabel.getPreferredSize().height / 2,
+                           actionLabel.getPreferredSize().width,
+                           actionLabel.getPreferredSize().height);
+    actionLabel.setHorizontalAlignment(SwingConstants.CENTER);
+    actionLabel.setFont(new Font("Sans Serif", Font.BOLD, 24));
+    actionLabel.setForeground(Color.WHITE);
+    layeredPane.add(actionLabel, Integer.valueOf(1));
 
     // Adds all buttons needed to play the game
     addTableButtons();
@@ -290,6 +302,8 @@ public class RouletteGUI implements ActionListener
    */
   public void actionPerformed(ActionEvent e)
   {
+    int randomNum;
+
     // Changes the bet amount
     if(e.getSource() == chip1)
       setSelectedChip(1);
@@ -300,9 +314,12 @@ public class RouletteGUI implements ActionListener
     else if(e.getSource() == chip500)
       setSelectedChip(500);
     else if(e.getSource() == spin)
-      {
+    {
       // Spins the wheel and pays out
-      game.spin();
+      randomNum = game.spin();
+
+      // Updates the action label
+      actionLabel.setText("The ball landed on: " + randomNum);
 
       // Removes all the chips from the table
       for(int i = 0; i < 49; i++)
