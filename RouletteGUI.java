@@ -12,9 +12,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-/**
- * Displays an interactable roulette table
- */
+/** Displays an interactable roulette table */
 public class RouletteGUI implements ActionListener
 {
   private Roulette game;    // An instance of a roulette game
@@ -28,11 +26,9 @@ public class RouletteGUI implements ActionListener
   private JPanel contentPane;
   private JLayeredPane layeredPane;
   private ImageIcon imageIcon;
-  private JLabel bgLabel, balanceLabel, actionLabel;
+  private JLabel bgLabel, balanceLabel, actionLabel, actionLabelAlt;
 
-  /**
-   * Default constructor
-   */
+  /** Default constructor */
   public RouletteGUI()
   {
     game = new Roulette();
@@ -40,9 +36,7 @@ public class RouletteGUI implements ActionListener
     betAmount = 1;
   }
 
-  /**
-   * Builds and returns a menu bar
-   */
+  /** Builds and returns a menu bar */
   private JMenuBar buildMenuBar()
   {
     JMenuBar menuBar;
@@ -71,9 +65,7 @@ public class RouletteGUI implements ActionListener
     return menuBar;
   }
 
-  /**
-   * Builds and returns a content pane
-   */
+  /** Builds and returns a content pane */
   private JPanel buildContentPane()
   {
     // Sets up the content pane
@@ -93,8 +85,8 @@ public class RouletteGUI implements ActionListener
     // Adds the player balance label
     balanceLabel = new JLabel("Balance: " + game.getBalance());
     balanceLabel.setPreferredSize(new Dimension(250, 50));
-    balanceLabel.setBounds(1024 / 2 - balanceLabel.getPreferredSize().width / 2,
-                           650 - balanceLabel.getPreferredSize().height / 2,
+    balanceLabel.setBounds(824 - balanceLabel.getPreferredSize().width / 2,
+                           575 - balanceLabel.getPreferredSize().height / 2,
                            balanceLabel.getPreferredSize().width,
                            balanceLabel.getPreferredSize().height);
     balanceLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -106,13 +98,25 @@ public class RouletteGUI implements ActionListener
     actionLabel = new JLabel("");
     actionLabel.setPreferredSize(new Dimension(500, 50));
     actionLabel.setBounds(1024 / 2 - actionLabel.getPreferredSize().width / 2,
-                           90 - actionLabel.getPreferredSize().height / 2,
+                           85 - actionLabel.getPreferredSize().height / 2,
                            actionLabel.getPreferredSize().width,
                            actionLabel.getPreferredSize().height);
     actionLabel.setHorizontalAlignment(SwingConstants.CENTER);
     actionLabel.setFont(new Font("Sans Serif", Font.BOLD, 24));
     actionLabel.setForeground(Color.WHITE);
     layeredPane.add(actionLabel, Integer.valueOf(1));
+
+    // Adds the alternative action label to the top of the screen.
+    actionLabelAlt = new JLabel("");
+    actionLabelAlt.setPreferredSize(new Dimension(500, 50));
+    actionLabelAlt.setBounds(1024 / 2 - actionLabelAlt.getPreferredSize().width / 2,
+                           130 - actionLabelAlt.getPreferredSize().height / 2,
+                           actionLabelAlt.getPreferredSize().width,
+                           actionLabelAlt.getPreferredSize().height);
+    actionLabelAlt.setHorizontalAlignment(SwingConstants.CENTER);
+    actionLabelAlt.setFont(new Font("Sans Serif", Font.BOLD, 24));
+    actionLabelAlt.setForeground(Color.WHITE);
+    layeredPane.add(actionLabelAlt, Integer.valueOf(1));
 
     // Adds all buttons needed to play the game
     addTableButtons();
@@ -125,9 +129,7 @@ public class RouletteGUI implements ActionListener
     return contentPane;
   }
 
-  /**
-   * Creates all the table buttons
-   */
+  /** Creates all the table buttons */
   public void addTableButtons()
   {
     int xpos;          // An x-coordinate position
@@ -184,24 +186,22 @@ public class RouletteGUI implements ActionListener
     }
   }
 
-  /**
-   * Creates the chip selection buttons
-   */
+  /** Creates the chip selection buttons */
   public void addChipButtons()
   {
-    // Declares the buttons.
+    // Declares the buttons
     chip1 = new JButton(""); 
     chip10 = new JButton("");
     chip100 = new JButton("");
     chip500 = new JButton("");
 
-    // Sets their positions.
+    // Sets their positions
     chip1.setBounds(0,598,100,100);
     chip10.setBounds(100,598,100,100);
     chip100.setBounds(200,598,100,100);
     chip500.setBounds(300,598,100,100);
 
-    // Sets the button properties.
+    // Sets the button properties
     chip1.setIcon(new ImageIcon(getClass().getResource("images/1BigSelect.png")));
     chip1.setContentAreaFilled(false);
     chip1.setBorderPainted(false);
@@ -215,29 +215,27 @@ public class RouletteGUI implements ActionListener
     chip500.setContentAreaFilled(false);
     chip500.setBorderPainted(false);
 
-    // Adds the chip buttons.
+    // Adds the chip buttons
     layeredPane.add(chip1, Integer.valueOf(1));
     layeredPane.add(chip10, Integer.valueOf(1));
     layeredPane.add(chip100, Integer.valueOf(1));
     layeredPane.add(chip500, Integer.valueOf(1));
 
-    // Adds the action listeners.
+    // Adds the action listeners
     chip1.addActionListener(this);
     chip10.addActionListener(this);
     chip100.addActionListener(this);
     chip500.addActionListener(this);
   }
 
-  /**
-   * Creates and adds both the spin and clear buttons
-   */
+  /** Creates and adds both the spin and clear buttons */
   public void addSpinClearButtons()
   {
-    // Creates the buttons.
+    // Creates the buttons
     spin = new JButton("");
     clear = new JButton("");
 
-    // Sets the button properties.
+    // Sets the button properties
     spin.setIcon(new ImageIcon(getClass().getResource("images/spin.png")));
     spin.setBounds(824,598,200,100);
     spin.setBorderPainted(false);
@@ -249,18 +247,16 @@ public class RouletteGUI implements ActionListener
     clear.setContentAreaFilled(false);
     clear.setBorderPainted(false);
 
-    // Adds both buttons.
+    // Adds both buttons
     layeredPane.add(spin, Integer.valueOf(1));
     layeredPane.add(clear, Integer.valueOf(1));
 
-    // Adds the action listeners.
+    // Adds the action listeners
     spin.addActionListener(this);
     clear.addActionListener(this);
   }
 
-  /**
-   * Highlights the chip selected by the player
-   */
+  /** Highlights the chip selected by the player */
   private void setSelectedChip(int newChip)
   {
     if (newChip == 1 && newChip != betAmount)
@@ -297,12 +293,13 @@ public class RouletteGUI implements ActionListener
     }
   }
 
-  /**
-   * Allows for interacting with all the buttons on the table
-   */
+  /** Allows for interacting with all the buttons on the table */
   public void actionPerformed(ActionEvent e)
   {
-    int randomNum;
+    Integer randomNum;
+
+    actionLabel.setText("");
+    actionLabelAlt.setText("");
 
     // Changes the bet amount
     if(e.getSource() == chip1)
@@ -316,15 +313,27 @@ public class RouletteGUI implements ActionListener
     else if(e.getSource() == spin)
     {
       // Spins the wheel and pays out
-      randomNum = game.spin();
+      randomNum = Integer.valueOf(game.spin());
 
-      // Updates the action label
-      actionLabel.setText("The ball landed on: " + randomNum);
-
-      // Removes all the chips from the table
-      for(int i = 0; i < 49; i++)
+      // Updates the action labels
+      actionLabel.setText("The ball landed on: ");
+      if (game.red(randomNum))
       {
-        buttons[i].setIcon(new ImageIcon(getClass().getResource("images/empty.png")));
+        actionLabelAlt.setForeground(Color.RED);
+      }
+      else
+      {
+        actionLabelAlt.setForeground(Color.BLACK);
+      }
+      actionLabelAlt.setText(randomNum.toString());
+
+      // Removes all the losing chips from the table
+      for (int i = 0; i < 49; i++)
+      {
+        if (!game.isBetTrue(i))
+        {
+          buttons[i].setIcon(new ImageIcon(getClass().getResource("images/empty.png")));
+        }
       }
 
       // Updates the balance label
@@ -343,6 +352,9 @@ public class RouletteGUI implements ActionListener
 
       // Updates the balance label
       balanceLabel.setText("Balance: " + game.getBalance());
+
+      // Updates the action label
+      actionLabel.setText("Chips have been returned");
     }
     else
     {
@@ -374,27 +386,6 @@ public class RouletteGUI implements ActionListener
           break;
         }
       }
-    }
-  }
-
-  /**
-   * Custom JPanel to be used for testing stuff
-   */
-  private class CustomPanel extends JPanel
-  {
-    public CustomPanel()
-    {
-      super();
-      setPreferredSize(new Dimension(1024, 768));
-      setOpaque(false);
-    }
-
-    public void paintComponent(Graphics g)
-    {
-      super.paintComponent(g);
-      g.setColor(Color.RED);
-      g.drawLine(1024 / 2, 0, 1024 / 2, 768);
-      g.drawLine(0, 768 / 2, 1024, 768 / 2);
     }
   }
 
