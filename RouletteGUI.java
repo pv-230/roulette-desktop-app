@@ -86,7 +86,7 @@ public class RouletteGUI implements ActionListener
     balanceLabel = new JLabel("Balance: " + game.getBalance());
     balanceLabel.setPreferredSize(new Dimension(250, 50));
     balanceLabel.setBounds(824 - balanceLabel.getPreferredSize().width / 2,
-                           575 - balanceLabel.getPreferredSize().height / 2,
+                           565 - balanceLabel.getPreferredSize().height / 2,
                            balanceLabel.getPreferredSize().width,
                            balanceLabel.getPreferredSize().height);
     balanceLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -95,7 +95,7 @@ public class RouletteGUI implements ActionListener
     layeredPane.add(balanceLabel, Integer.valueOf(1));
 
     // Adds the action label to the top of the screen.
-    actionLabel = new JLabel("");
+    actionLabel = new JLabel("Welcome, place your bets");
     actionLabel.setPreferredSize(new Dimension(500, 50));
     actionLabel.setBounds(1024 / 2 - actionLabel.getPreferredSize().width / 2,
                            85 - actionLabel.getPreferredSize().height / 2,
@@ -122,6 +122,9 @@ public class RouletteGUI implements ActionListener
     addTableButtons();
     addChipButtons();
     addSpinClearButtons();
+
+    // Adds an end game popup to allow a player to play again
+
 
     // Adds the layered pane to the content pane
     contentPane.add(layeredPane);
@@ -300,6 +303,7 @@ public class RouletteGUI implements ActionListener
 
     actionLabel.setText("");
     actionLabelAlt.setText("");
+    actionLabelAlt.setForeground(Color.BLACK);
 
     // Changes the bet amount
     if(e.getSource() == chip1)
@@ -314,79 +318,130 @@ public class RouletteGUI implements ActionListener
     {
       // Spins the wheel and pays out
       randomNum = Integer.valueOf(game.spin());
-
-      // Updates the action labels
-      actionLabel.setText("The ball landed on: ");
-      if (game.red(randomNum))
-      {
-        actionLabelAlt.setForeground(Color.RED);
-      }
-      else
-      {
-        actionLabelAlt.setForeground(Color.BLACK);
-      }
-      actionLabelAlt.setText(randomNum.toString());
-
-      // Removes all the losing chips from the table
-      for (int i = 0; i < 49; i++)
-      {
-        if (!game.isBetTrue(i))
-        {
-          buttons[i].setIcon(new ImageIcon(getClass().getResource("images/empty.png")));
-        }
-      }
-
-      // Updates the balance label
-      balanceLabel.setText("Balance: " + game.getBalance());
+      spinAction(randomNum);
     }
     else if(e.getSource() == clear)
     {
-      // Clears the player's bets
-      game.clearBets();
-
-      // Removes all the chips from the table
-      for(int i = 0; i < 49; i++)
-      {
-        buttons[i].setIcon(new ImageIcon(getClass().getResource("images/empty.png")));
-      }
-
-      // Updates the balance label
-      balanceLabel.setText("Balance: " + game.getBalance());
-
-      // Updates the action label
-      actionLabel.setText("Chips have been returned");
+      clearAction();
     }
     else
     {
       // Loops through all the buttons
       for(int i = 0; i < 49; i++)
       {
-        // Checks the button
         if(e.getSource() == buttons[i])
         {
-          // Checks that they have enough money
-          if(game.getBalance() >= betAmount)
-          {
-            // Adds the bet
-            game.addBet(i, betAmount);
-
-            // Adds the chip image
-            if(betAmount == 1)
-              buttons[i].setIcon(new ImageIcon(getClass().getResource("images/1.png")));
-            else if(betAmount == 10)
-              buttons[i].setIcon(new ImageIcon(getClass().getResource("images/10.png")));
-            else if(betAmount == 100)
-              buttons[i].setIcon(new ImageIcon(getClass().getResource("images/100.png")));
-            else
-              buttons[i].setIcon(new ImageIcon(getClass().getResource("images/500.png")));
-          }
-            
-          // Updates the balance label
-          balanceLabel.setText("Balance: " + game.getBalance());
+          // Adds a bet to the chosen spot
+          betAction(i);
           break;
         }
       }
     }
+  }
+
+  /** Simulates the ball landing on a random number */
+  private void spinAction(Integer num)
+  {
+    Boolean betWon = false;
+    Object[] strings = {"New Game", "Quit"};
+    int option;
+
+    // Updates the action labels
+    actionLabel.setText("The ball landed on: ");
+    if (game.red(num))
+    {
+      actionLabelAlt.setForeground(Color.RED);
+    }
+    else
+    {
+      actionLabelAlt.setForeground(Color.BLACK);
+    }
+    actionLabelAlt.setText(num.toString());
+
+    // Removes all the losing chips from the table
+    for (int i = 0; i < 49; i++)
+    {
+      if (!game.isBetTrue(i))
+      {
+        buttons[i].setIcon(new ImageIcon(getClass().getResource("images/empty.png")));
+      }
+      else
+      {
+        betWon = true;
+      }
+    }
+
+    // Updates the balance label
+    balanceLabel.setText("Balance: " + game.getBalance());
+
+    if (!betWon && game.getBalance() == 0)
+    {
+      option = JOptionPane.showOptionDialog(contentPane,
+                                            new JLabel("You lose!", JLabel.CENTER),
+                                            "Game over",
+                                            JOptionPane.YES_NO_OPTION,
+                                            JOptionPane.PLAIN_MESSAGE,
+                                            null,
+                                            strings,
+                                            null);
+      if (option == 0)
+      {
+        game = new Roulette();
+        actionLabel.setText("Place your bets");
+        actionLabelAlt.setText("");
+        balanceLabel.setText("Balance: " + game.getBalance());
+      }
+      else
+      {
+        System.exit(0);
+      }
+    }
+  }
+
+  /** Simulates the table being cleared of chips */
+  private void clearAction()
+  {
+    // Clears the player's bets
+    if (game.clearBets())
+    {
+      // Updates the balance and action labels
+      balanceLabel.setText("Balance: " + game.getBalance());
+      actionLabel.setText("Chips have been returned");
+
+      // Removes all the chips from the table
+      for(int i = 0; i < 49; i++)
+      {
+        buttons[i].setIcon(new ImageIcon(getClass().getResource("images/empty.png")));
+      }
+    }
+    else
+    {
+      actionLabel.setText("No chips are on the table");
+    }
+  }
+
+  /** Simulates the player betting on a number */
+  private void betAction(int i)
+  {
+    // Checks that they have enough money
+    if(game.getBalance() >= betAmount)
+    {
+      // Adds the bet
+      game.addBet(i, betAmount);
+
+      // Adds the chip image
+      if(betAmount == 1)
+        buttons[i].setIcon(new ImageIcon(getClass().getResource("images/1.png")));
+      else if(betAmount == 10)
+        buttons[i].setIcon(new ImageIcon(getClass().getResource("images/10.png")));
+      else if(betAmount == 100)
+        buttons[i].setIcon(new ImageIcon(getClass().getResource("images/100.png")));
+      else
+        buttons[i].setIcon(new ImageIcon(getClass().getResource("images/500.png")));
+    }
+      
+    // Updates the balance label
+    balanceLabel.setText("Balance: " + game.getBalance());
   }
 
   public static void main(String args[])

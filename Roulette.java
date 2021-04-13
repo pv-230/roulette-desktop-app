@@ -162,17 +162,22 @@ public class Roulette
     }
   }
 
-  /** Clears the player's bets */
-  public void clearBets()
+  /** Clears the player's bets. Returns true if any bets were removed. */
+  public Boolean clearBets()
   {
+    Boolean betsRemoved = false;
+
     for(int i = 0; i < 49; i++)
     {
       if(bets[i] != 0)
       {
         balance += bets[i];
         bets[i] = 0;
+        betsRemoved = true;
       }
     }
+
+    return betsRemoved;
   }
 
   /** Checks if the number is red */
