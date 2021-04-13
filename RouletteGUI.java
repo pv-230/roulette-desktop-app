@@ -86,7 +86,7 @@ public class RouletteGUI implements ActionListener
     balanceLabel = new JLabel("Balance: " + game.getBalance());
     balanceLabel.setPreferredSize(new Dimension(250, 50));
     balanceLabel.setBounds(824 - balanceLabel.getPreferredSize().width / 2,
-                           565 - balanceLabel.getPreferredSize().height / 2,
+                           596 - balanceLabel.getPreferredSize().height / 2,
                            balanceLabel.getPreferredSize().width,
                            balanceLabel.getPreferredSize().height);
     balanceLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -110,7 +110,7 @@ public class RouletteGUI implements ActionListener
     actionLabelAlt = new JLabel("");
     actionLabelAlt.setPreferredSize(new Dimension(500, 50));
     actionLabelAlt.setBounds(1024 / 2 - actionLabelAlt.getPreferredSize().width / 2,
-                           130 - actionLabelAlt.getPreferredSize().height / 2,
+                           104 - actionLabelAlt.getPreferredSize().height / 2,
                            actionLabelAlt.getPreferredSize().width,
                            actionLabelAlt.getPreferredSize().height);
     actionLabelAlt.setHorizontalAlignment(SwingConstants.CENTER);
@@ -240,12 +240,12 @@ public class RouletteGUI implements ActionListener
 
     // Sets the button properties
     spin.setIcon(new ImageIcon(getClass().getResource("images/spin.png")));
-    spin.setBounds(824,598,200,100);
+    spin.setBounds(824,628,200,100);
     spin.setBorderPainted(false);
     spin.setContentAreaFilled(false);
     spin.setBorderPainted(false);
     clear.setIcon(new ImageIcon(getClass().getResource("images/clear.png")));
-    clear.setBounds(624,598,200,100);
+    clear.setBounds(624,628,200,100);
     clear.setBorderPainted(false);
     clear.setContentAreaFilled(false);
     clear.setBorderPainted(false);
@@ -347,6 +347,10 @@ public class RouletteGUI implements ActionListener
     int option;
 
     // Updates the action labels
+    actionLabel.setBounds(1024 / 2 - actionLabelAlt.getPreferredSize().width / 2,
+                           69 - actionLabelAlt.getPreferredSize().height / 2,
+                           actionLabelAlt.getPreferredSize().width,
+                           actionLabelAlt.getPreferredSize().height);
     actionLabel.setText("The ball landed on: ");
     if (game.red(num))
     {
@@ -405,6 +409,10 @@ public class RouletteGUI implements ActionListener
     if (game.clearBets())
     {
       // Updates the balance and action labels
+      actionLabel.setBounds(1024 / 2 - actionLabelAlt.getPreferredSize().width / 2,
+                           104 - actionLabelAlt.getPreferredSize().height / 2,
+                           actionLabelAlt.getPreferredSize().width,
+                           actionLabelAlt.getPreferredSize().height);
       balanceLabel.setText("Balance: " + game.getBalance());
       actionLabel.setText("Chips have been returned");
 
@@ -416,6 +424,10 @@ public class RouletteGUI implements ActionListener
     }
     else
     {
+      actionLabel.setBounds(1024 / 2 - actionLabelAlt.getPreferredSize().width / 2,
+                           85 - actionLabelAlt.getPreferredSize().height / 2,
+                           actionLabelAlt.getPreferredSize().width,
+                           actionLabelAlt.getPreferredSize().height);
       actionLabel.setText("No chips are on the table");
     }
   }
