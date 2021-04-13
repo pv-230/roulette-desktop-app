@@ -295,6 +295,10 @@ public class RouletteGUI implements ActionListener
       chip100.setIcon(new ImageIcon(getClass().getResource("images/100Big.png")));
       chip500.setIcon(new ImageIcon(getClass().getResource("images/500BigSelect.png")));
     }
+    else
+    {
+      actionLabel.setText("Now betting with " + betAmount);
+    }
   }
 
   /** Allows for interacting with all the buttons on the table */
