@@ -4,7 +4,8 @@ Course: COP 3252
 Assignment Number: X
 
 This is the game logic file for the Roulette application. All game behavior
-such as payout is controlled here.
+such as winnings payout is controlled here. The roulette GUI file will use
+various public methods from this class.
 ******************************************************************************/
 
 import java.util.Random;
@@ -16,6 +17,8 @@ public class Roulette implements java.io.Serializable
   private int num;        // The number that the ball landed on
   private Random random;
 
+  // betsBool stores true for the bets that the player won. The bets array
+  // stores the bet amounts for each bet position.
   private Boolean[] betsBool;
   private int[] bets;
   // Array slots for bets array are:

@@ -5,7 +5,8 @@ Assignment Number: X
 
 This is the GUI class file for the roulette game. The playing area is locked in
 a 1024x768 window. The GUI frame contains a menu bar and a content pane that
-displays the roulette table.
+displays the roulette table. This class uses custom graphics as resources for
+the table and buttons.
 ******************************************************************************/
 
 import javax.swing.*;
@@ -91,7 +92,7 @@ public class RouletteGUI implements ActionListener
     layeredPane.add(bgLabel, Integer.valueOf(0));
 
     // Adds the player balance label
-    balanceLabel = new JLabel("Balance: " + game.getBalance());
+    balanceLabel = new JLabel("Balance: $" + game.getBalance());
     balanceLabel.setPreferredSize(new Dimension(250, 50));
     balanceLabel.setBounds(824 - balanceLabel.getPreferredSize().width / 2,
                            596 - balanceLabel.getPreferredSize().height / 2,
@@ -270,7 +271,7 @@ public class RouletteGUI implements ActionListener
     if (newChip == 1 && newChip != betAmount)
     {
       betAmount = 1;
-	    actionLabel.setText("Now betting with " + betAmount);
+      actionLabel.setText("Now betting with $" + betAmount);
       chip1.setIcon(new ImageIcon(getClass().getResource("images/1BigSelect.png")));
       chip10.setIcon(new ImageIcon(getClass().getResource("images/10Big.png")));
       chip100.setIcon(new ImageIcon(getClass().getResource("images/100Big.png")));
@@ -279,7 +280,7 @@ public class RouletteGUI implements ActionListener
     else if (newChip == 10 && newChip != betAmount)
     {
       betAmount = 10;
-	    actionLabel.setText("Now betting with " + betAmount);
+      actionLabel.setText("Now betting with $" + betAmount);
       chip1.setIcon(new ImageIcon(getClass().getResource("images/1Big.png")));
       chip10.setIcon(new ImageIcon(getClass().getResource("images/10BigSelect.png")));
       chip100.setIcon(new ImageIcon(getClass().getResource("images/100Big.png")));
@@ -288,7 +289,7 @@ public class RouletteGUI implements ActionListener
     else if (newChip == 100 && newChip != betAmount)
     {
       betAmount = 100;
-	    actionLabel.setText("Now betting with " + betAmount);
+      actionLabel.setText("Now betting with $" + betAmount);
       chip1.setIcon(new ImageIcon(getClass().getResource("images/1Big.png")));
       chip10.setIcon(new ImageIcon(getClass().getResource("images/10Big.png")));
       chip100.setIcon(new ImageIcon(getClass().getResource("images/100BigSelect.png")));
@@ -297,7 +298,7 @@ public class RouletteGUI implements ActionListener
     else if (newChip == 500 && newChip != betAmount)
     {
       betAmount = 500;
-	    actionLabel.setText("Now betting with " + betAmount);
+      actionLabel.setText("Now betting with $" + betAmount);
       chip1.setIcon(new ImageIcon(getClass().getResource("images/1Big.png")));
       chip10.setIcon(new ImageIcon(getClass().getResource("images/10Big.png")));
       chip100.setIcon(new ImageIcon(getClass().getResource("images/100Big.png")));
@@ -305,14 +306,14 @@ public class RouletteGUI implements ActionListener
     }
     else
     {
-      actionLabel.setText("Now betting with " + betAmount);
+      actionLabel.setText("Now betting with $" + betAmount);
     }
   }
 
   /** Allows for interacting with all the buttons on the table */
   public void actionPerformed(ActionEvent e)
   {
-    Integer randomNum;
+    Integer randomNum;  // Stores the random number that was generated
 
     // Resets labels
     actionLabel.setText("");
@@ -346,7 +347,7 @@ public class RouletteGUI implements ActionListener
     else if(e.getSource() == newGame)
     {
       game = new Roulette();
-      balanceLabel.setText("Balance: " + game.getBalance());
+      balanceLabel.setText("Balance: $" + game.getBalance());
     }
     else if(e.getSource() == saveProf)
       saveAction();
@@ -386,9 +387,9 @@ public class RouletteGUI implements ActionListener
   /** Simulates the ball landing on a random number */
   private void spinAction(Integer num)
   {
-    Boolean betWon = false;
-    Object[] strings = {"New Game", "Quit"};
-    int option;
+    Boolean betWon = false;  // True if at least one bet was won
+    int option;              // Stores the end game popup selections
+    Object[] strings = {"New Game", "Quit"};  // Used for the end game popup
 
     // Updates the action labels
     actionLabel.setBounds(1024 / 2 - actionLabel.getPreferredSize().width / 2,
@@ -424,8 +425,9 @@ public class RouletteGUI implements ActionListener
     }
 
     // Updates the balance label
-    balanceLabel.setText("Balance: " + game.getBalance());
+    balanceLabel.setText("Balance: $" + game.getBalance());
 
+    // Determines if the player has lost the game (ran out of money)
     if (!betWon && game.getBalance() == 0)
     {
       option = JOptionPane.showOptionDialog(contentPane,
@@ -439,13 +441,13 @@ public class RouletteGUI implements ActionListener
       if (option == 0)
       {
         game = new Roulette();
-		    actionLabel.setBounds(1024 / 2 - actionLabel.getPreferredSize().width / 2,
+        actionLabel.setBounds(1024 / 2 - actionLabel.getPreferredSize().width / 2,
                               85 - actionLabel.getPreferredSize().height / 2,
                               actionLabel.getPreferredSize().width,
                               actionLabel.getPreferredSize().height);
         actionLabel.setText("Place your bets");
         actionLabelAlt.setText("");
-        balanceLabel.setText("Balance: " + game.getBalance());
+        balanceLabel.setText("Balance: $" + game.getBalance());
       }
       else
       {
@@ -461,7 +463,7 @@ public class RouletteGUI implements ActionListener
     if (game.clearBets())
     {
       // Updates the balance and action labels
-      balanceLabel.setText("Balance: " + game.getBalance());
+      balanceLabel.setText("Balance: $" + game.getBalance());
       actionLabel.setText("Chips have been returned");
 
       // Removes all the chips from the table
@@ -479,12 +481,9 @@ public class RouletteGUI implements ActionListener
   /** Simulates the player betting on a number */
   private void betAction(int i)
   {
-    // Checks that they have enough money
-    if(game.getBalance() >= betAmount)
+    // Adds the bet if the player has enough money
+    if(game.addBet(i, betAmount))
     {
-      // Adds the bet
-      game.addBet(i, betAmount);
-
       // Adds the chip image
       if(betAmount == 1)
         buttons[i].setIcon(new ImageIcon(getClass().getResource("images/1.png")));
@@ -494,13 +493,22 @@ public class RouletteGUI implements ActionListener
         buttons[i].setIcon(new ImageIcon(getClass().getResource("images/100.png")));
       else
         buttons[i].setIcon(new ImageIcon(getClass().getResource("images/500.png")));
+
+      // Updates the labels
+      actionLabel.setText("Total bet amount: $" + game.getTotalBets());
+      // Updates the balance label
+      balanceLabel.setText("Balance: $" + game.getBalance());
     }
-      
-    // Updates the balance label
-    balanceLabel.setText("Balance: " + game.getBalance());
-	
-	  // Updates the action label
-    actionLabel.setText("Total bet amount: " + game.getTotalBets());
+    else
+    {
+      // Updates the action label if player doesn't have enough money
+      actionLabel.setBounds(1024 / 2 - actionLabel.getPreferredSize().width / 2,
+                            69 - actionLabel.getPreferredSize().height / 2,
+                            actionLabel.getPreferredSize().width,
+                            actionLabel.getPreferredSize().height);
+      actionLabel.setText("Not enough money");
+      actionLabelAlt.setText("Total bet amount: $" + game.getTotalBets());
+    }
   }
 
   // Serializes a player's game
