@@ -113,37 +113,37 @@ public class Roulette
       if(bets[i] != 0 && i == 43 && num > 0 && num <= 18)
       {
         betsBool[43] = true;
-        winnings += (bets[43] * 1);
+        winnings += (bets[43]);
       }
       // Checks for win on second half
       if(bets[i] != 0 && i == 48 && num > 18 && num <= 36)
       {
         betsBool[48] = true;
-        winnings += (bets[48] * 1);
+        winnings += (bets[48]);
       }
       // Checks for win on evens
-      if(bets[i] != 0 && i == 44 && (num % 2) == 0)
+      if(bets[i] != 0 && i == 44 && (num % 2) == 0 && num != 0)
       {
         betsBool[44] = true;
-        winnings += (bets[44] * 1);
+        winnings += (bets[44]);
       }
       // Checks for win on odds
       if(bets[i] != 0 && i == 47 && ((num % 2) - 1) == 0)
       {
         betsBool[47] = true;
-        winnings += (bets[47] * 1);
+        winnings += (bets[47]);
       }
       // Checks for win on reds
       if(bets[i] != 0 && i == 45 && red(num))
       {
         betsBool[45] = true;
-        winnings += (bets[45] * 1);
+        winnings += (bets[45]);
       }
       // Checks for win on blacks
       if(bets[i] != 0 && i == 46 && black(num))
       {
         betsBool[46] = true;
-        winnings += (bets[46] * 1);
+        winnings += (bets[46]);
       }
     }
 
@@ -225,5 +225,16 @@ public class Roulette
   public Boolean isBetTrue(int i)
   {
     return betsBool[i];
+  }
+
+  /** Calculates the total bets amount on the table */
+  public int getTotalBets()
+  {
+    int totalBets = 0;
+
+    for (int i = 0; i < 49; i++)
+      totalBets += bets[i];
+
+    return totalBets;
   }
 }
