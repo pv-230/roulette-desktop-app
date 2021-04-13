@@ -11,12 +11,14 @@ displays the roulette table.
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.lang.*;
+import java.io.*;
 
 /** Displays an interactable roulette table */
 public class RouletteGUI implements ActionListener
 {
   private Roulette game;    // An instance of a roulette game
-  private int betAmount;    // The current bet amount by the player
+  protected int betAmount;  // The current bet amount by the player
 
   // Buttons used to play the game
   private JButton[] buttons;
@@ -27,6 +29,11 @@ public class RouletteGUI implements ActionListener
   private JLayeredPane layeredPane;
   private ImageIcon imageIcon;
   private JLabel bgLabel, balanceLabel, actionLabel, actionLabelAlt;
+
+  // Components for the menu bar
+  JMenuBar menuBar;
+  JMenu fileMenu, helpMenu;
+  JMenuItem newGame, saveProf, loadProf, howTo;
 
   /** Default constructor */
   public RouletteGUI()
@@ -39,10 +46,7 @@ public class RouletteGUI implements ActionListener
   /** Builds and returns a menu bar */
   private JMenuBar buildMenuBar()
   {
-    JMenuBar menuBar;
-    JMenu fileMenu, helpMenu;
-    JMenuItem menuItem;
-
+    
     // Sets up the menu bar
     menuBar = new JMenuBar();
     fileMenu = new JMenu("File");
@@ -51,16 +55,20 @@ public class RouletteGUI implements ActionListener
     menuBar.add(helpMenu);
 
     // Sets up the file menu
-    menuItem = new JMenuItem("New Game");
-    fileMenu.add(menuItem);
-    menuItem = new JMenuItem("Save Profile");
-    fileMenu.add(menuItem);
-    menuItem = new JMenuItem("Load Profile");
-    fileMenu.add(menuItem);
+    newGame = new JMenuItem("New Game");
+    fileMenu.add(newGame);
+    newGame.addActionListener(this);
+    saveProf = new JMenuItem("Save Profile");
+    fileMenu.add(saveProf);
+    saveProf.addActionListener(this);
+    loadProf = new JMenuItem("Load Profile");
+    fileMenu.add(loadProf);
+    loadProf.addActionListener(this);
 
     // Sets up the help menu
-    menuItem = new JMenuItem("How to Play");
-    helpMenu.add(menuItem);
+    howTo = new JMenuItem("How to Play");
+    helpMenu.add(howTo);
+    howTo.addActionListener(this);
 
     return menuBar;
   }
@@ -75,6 +83,7 @@ public class RouletteGUI implements ActionListener
 
     // Sets up the layered pane
     layeredPane = new JLayeredPane();
+
 
     // Adds the background image of the roulette table
     imageIcon = new ImageIcon(getClass().getResource("images/table.png"));
@@ -122,6 +131,9 @@ public class RouletteGUI implements ActionListener
     addTableButtons();
     addChipButtons();
     addExtraButtons();
+
+    // Adds an end game popup to allow a player to play again
+
 
     // Adds the layered pane to the content pane
     contentPane.add(layeredPane);
@@ -262,7 +274,7 @@ public class RouletteGUI implements ActionListener
     if (newChip == 1 && newChip != betAmount)
     {
       betAmount = 1;
-      actionLabel.setText("Now betting with " + betAmount);
+	  actionLabel.setText("Now betting with " + betAmount);
       chip1.setIcon(new ImageIcon(getClass().getResource("images/1BigSelect.png")));
       chip10.setIcon(new ImageIcon(getClass().getResource("images/10Big.png")));
       chip100.setIcon(new ImageIcon(getClass().getResource("images/100Big.png")));
@@ -271,7 +283,7 @@ public class RouletteGUI implements ActionListener
     else if (newChip == 10 && newChip != betAmount)
     {
       betAmount = 10;
-      actionLabel.setText("Now betting with " + betAmount);
+	  actionLabel.setText("Now betting with " + betAmount);
       chip1.setIcon(new ImageIcon(getClass().getResource("images/1Big.png")));
       chip10.setIcon(new ImageIcon(getClass().getResource("images/10BigSelect.png")));
       chip100.setIcon(new ImageIcon(getClass().getResource("images/100Big.png")));
@@ -280,7 +292,7 @@ public class RouletteGUI implements ActionListener
     else if (newChip == 100 && newChip != betAmount)
     {
       betAmount = 100;
-      actionLabel.setText("Now betting with " + betAmount);
+	  actionLabel.setText("Now betting with " + betAmount);
       chip1.setIcon(new ImageIcon(getClass().getResource("images/1Big.png")));
       chip10.setIcon(new ImageIcon(getClass().getResource("images/10Big.png")));
       chip100.setIcon(new ImageIcon(getClass().getResource("images/100BigSelect.png")));
@@ -289,16 +301,16 @@ public class RouletteGUI implements ActionListener
     else if (newChip == 500 && newChip != betAmount)
     {
       betAmount = 500;
-      actionLabel.setText("Now betting with " + betAmount);
+	  actionLabel.setText("Now betting with " + betAmount);
       chip1.setIcon(new ImageIcon(getClass().getResource("images/1Big.png")));
       chip10.setIcon(new ImageIcon(getClass().getResource("images/10Big.png")));
       chip100.setIcon(new ImageIcon(getClass().getResource("images/100Big.png")));
       chip500.setIcon(new ImageIcon(getClass().getResource("images/500BigSelect.png")));
     }
-    else
-    {
-      actionLabel.setText("Now betting with " + betAmount);
-    }
+	else
+	{
+	  actionLabel.setText("Now betting with " + betAmount);
+	}
   }
 
   /** Allows for interacting with all the buttons on the table */
@@ -306,14 +318,9 @@ public class RouletteGUI implements ActionListener
   {
     Integer randomNum;
 
-    // Resets labels
     actionLabel.setText("");
     actionLabelAlt.setText("");
-    actionLabelAlt.setForeground(Color.WHITE);
-    actionLabel.setBounds(1024 / 2 - actionLabel.getPreferredSize().width / 2,
-                          85 - actionLabel.getPreferredSize().height / 2,
-                          actionLabel.getPreferredSize().width,
-                          actionLabel.getPreferredSize().height);
+    actionLabelAlt.setForeground(Color.BLACK);
 
     // Changes the bet amount
     if(e.getSource() == chip1)
@@ -331,9 +338,19 @@ public class RouletteGUI implements ActionListener
       spinAction(randomNum);
     }
     else if(e.getSource() == clear)
-    {
-      // Clears the table and returns chips to the player
       clearAction();
+    else if(e.getSource() == newGame)
+    {
+      game = new Roulette();
+      balanceLabel.setText("Balance: " + game.getBalance());
+    }
+    else if(e.getSource() == saveProf)
+      saveAction();
+    else if(e.getSource() == loadProf)
+      loadAction();
+    else if(e.getSource() == howTo)
+    {
+
     }
     else
     {
@@ -350,6 +367,18 @@ public class RouletteGUI implements ActionListener
     }
   }
 
+  private void saveAction()
+  {
+    String username = JOptionPane.showInputDialog("What is your username?");
+    saveAcct(username);
+  }
+
+  private void loadAction()
+  {
+    String username = JOptionPane.showInputDialog("What is your username?");
+    loadAcct(username);
+  }
+
   /** Simulates the ball landing on a random number */
   private void spinAction(Integer num)
   {
@@ -358,10 +387,10 @@ public class RouletteGUI implements ActionListener
     int option;
 
     // Updates the action labels
-    actionLabel.setBounds(1024 / 2 - actionLabel.getPreferredSize().width / 2,
-                          69 - actionLabel.getPreferredSize().height / 2,
-                          actionLabel.getPreferredSize().width,
-                          actionLabel.getPreferredSize().height);
+    actionLabel.setBounds(1024 / 2 - actionLabelAlt.getPreferredSize().width / 2,
+                           69 - actionLabelAlt.getPreferredSize().height / 2,
+                           actionLabelAlt.getPreferredSize().width,
+                           actionLabelAlt.getPreferredSize().height);
     actionLabel.setText("The ball landed on: ");
     if (game.red(num))
     {
@@ -406,7 +435,7 @@ public class RouletteGUI implements ActionListener
       if (option == 0)
       {
         game = new Roulette();
-        actionLabel.setBounds(1024 / 2 - actionLabel.getPreferredSize().width / 2,
+		actionLabel.setBounds(1024 / 2 - actionLabel.getPreferredSize().width / 2,
                               85 - actionLabel.getPreferredSize().height / 2,
                               actionLabel.getPreferredSize().width,
                               actionLabel.getPreferredSize().height);
@@ -465,9 +494,54 @@ public class RouletteGUI implements ActionListener
       
     // Updates the balance label
     balanceLabel.setText("Balance: " + game.getBalance());
-
-    // Updates the action label
+	
+	  // Updates the action label
     actionLabel.setText("Total bet amount: " + game.getTotalBets());
+  }
+
+  // Serializes a player's game
+  void saveAcct(String username)
+  {
+    String fileLocation = "./Accounts/" + username + ".txt";
+    System.out.println(fileLocation);
+    try
+    {
+      File acctFile = new File(fileLocation);
+      acctFile.createNewFile();
+      FileOutputStream file = new FileOutputStream(fileLocation);
+      ObjectOutputStream acctOut = new ObjectOutputStream(file);
+      acctOut.writeObject(game);
+      acctOut.close();
+      file.close();
+    }
+    catch(IOException iox)
+    {
+      iox.printStackTrace();
+    }
+  }
+
+  // Loads a player's game
+  void loadAcct(String username)
+  {
+    String fileLocation = "./Accounts/" + username + ".txt";
+    try
+    {
+      FileInputStream file = new FileInputStream(fileLocation);
+      ObjectInputStream acctIn = new ObjectInputStream(file);
+      game = (Roulette) acctIn.readObject();
+      acctIn.close();
+      file.close();
+      balanceLabel.setText("Balance: " + game.getBalance());
+    }
+    catch(IOException iox)
+    {
+      System.out.println("Error: That is not a valid username");
+      iox.printStackTrace();
+    }
+    catch(ClassNotFoundException cnf)
+    {
+      System.out.println("Error: not a valid class");
+    }
   }
 
   public static void main(String args[])

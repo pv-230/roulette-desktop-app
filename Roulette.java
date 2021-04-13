@@ -10,7 +10,7 @@ such as payout is controlled here.
 import java.util.Random;
 
 /** Contains the game logic and holds the player's balance */
-public class Roulette
+public class Roulette implements java.io.Serializable
 {
   private int balance;    // The player's balance
   private int num;        // The number that the ball landed on
@@ -226,7 +226,7 @@ public class Roulette
   {
     return betsBool[i];
   }
-
+  
   /** Calculates the total bets amount on the table */
   public int getTotalBets()
   {
