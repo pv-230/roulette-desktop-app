@@ -17,7 +17,7 @@ import java.io.*;
 /** Displays an interactable roulette table */
 public class RouletteGUI implements ActionListener
 {
-  private Roulette game;    // An instance of a roulette game
+  private Roulette game;  // An instance of a roulette game
   private int betAmount;  // The current bet amount by the player
 
   // Buttons used to play the game
@@ -84,7 +84,6 @@ public class RouletteGUI implements ActionListener
     // Sets up the layered pane
     layeredPane = new JLayeredPane();
 
-
     // Adds the background image of the roulette table
     imageIcon = new ImageIcon(getClass().getResource("images/table.png"));
     bgLabel = new JLabel(imageIcon);
@@ -131,9 +130,6 @@ public class RouletteGUI implements ActionListener
     addTableButtons();
     addChipButtons();
     addExtraButtons();
-
-    // Adds an end game popup to allow a player to play again
-
 
     // Adds the layered pane to the content pane
     contentPane.add(layeredPane);
@@ -318,9 +314,14 @@ public class RouletteGUI implements ActionListener
   {
     Integer randomNum;
 
+    // Resets labels
     actionLabel.setText("");
     actionLabelAlt.setText("");
-    actionLabelAlt.setForeground(Color.BLACK);
+    actionLabelAlt.setForeground(Color.WHITE);
+    actionLabel.setBounds(1024 / 2 - actionLabel.getPreferredSize().width / 2,
+                          85 - actionLabel.getPreferredSize().height / 2,
+                          actionLabel.getPreferredSize().width,
+                          actionLabel.getPreferredSize().height);
 
     // Changes the bet amount
     if(e.getSource() == chip1)
@@ -338,7 +339,10 @@ public class RouletteGUI implements ActionListener
       spinAction(randomNum);
     }
     else if(e.getSource() == clear)
+    {
+      // Clears the table and returns chips to the player
       clearAction();
+    }
     else if(e.getSource() == newGame)
     {
       game = new Roulette();
@@ -387,10 +391,10 @@ public class RouletteGUI implements ActionListener
     int option;
 
     // Updates the action labels
-    actionLabel.setBounds(1024 / 2 - actionLabelAlt.getPreferredSize().width / 2,
-                           69 - actionLabelAlt.getPreferredSize().height / 2,
-                           actionLabelAlt.getPreferredSize().width,
-                           actionLabelAlt.getPreferredSize().height);
+    actionLabel.setBounds(1024 / 2 - actionLabel.getPreferredSize().width / 2,
+                          69 - actionLabel.getPreferredSize().height / 2,
+                          actionLabel.getPreferredSize().width,
+                          actionLabel.getPreferredSize().height);
     actionLabel.setText("The ball landed on: ");
     if (game.red(num))
     {
