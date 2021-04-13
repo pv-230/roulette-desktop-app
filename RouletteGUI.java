@@ -18,7 +18,7 @@ import java.io.*;
 public class RouletteGUI implements ActionListener
 {
   private Roulette game;    // An instance of a roulette game
-  protected int betAmount;  // The current bet amount by the player
+  private int betAmount;  // The current bet amount by the player
 
   // Buttons used to play the game
   private JButton[] buttons;
@@ -274,7 +274,7 @@ public class RouletteGUI implements ActionListener
     if (newChip == 1 && newChip != betAmount)
     {
       betAmount = 1;
-	  actionLabel.setText("Now betting with " + betAmount);
+	    actionLabel.setText("Now betting with " + betAmount);
       chip1.setIcon(new ImageIcon(getClass().getResource("images/1BigSelect.png")));
       chip10.setIcon(new ImageIcon(getClass().getResource("images/10Big.png")));
       chip100.setIcon(new ImageIcon(getClass().getResource("images/100Big.png")));
@@ -283,7 +283,7 @@ public class RouletteGUI implements ActionListener
     else if (newChip == 10 && newChip != betAmount)
     {
       betAmount = 10;
-	  actionLabel.setText("Now betting with " + betAmount);
+	    actionLabel.setText("Now betting with " + betAmount);
       chip1.setIcon(new ImageIcon(getClass().getResource("images/1Big.png")));
       chip10.setIcon(new ImageIcon(getClass().getResource("images/10BigSelect.png")));
       chip100.setIcon(new ImageIcon(getClass().getResource("images/100Big.png")));
@@ -292,7 +292,7 @@ public class RouletteGUI implements ActionListener
     else if (newChip == 100 && newChip != betAmount)
     {
       betAmount = 100;
-	  actionLabel.setText("Now betting with " + betAmount);
+	    actionLabel.setText("Now betting with " + betAmount);
       chip1.setIcon(new ImageIcon(getClass().getResource("images/1Big.png")));
       chip10.setIcon(new ImageIcon(getClass().getResource("images/10Big.png")));
       chip100.setIcon(new ImageIcon(getClass().getResource("images/100BigSelect.png")));
@@ -301,16 +301,16 @@ public class RouletteGUI implements ActionListener
     else if (newChip == 500 && newChip != betAmount)
     {
       betAmount = 500;
-	  actionLabel.setText("Now betting with " + betAmount);
+	    actionLabel.setText("Now betting with " + betAmount);
       chip1.setIcon(new ImageIcon(getClass().getResource("images/1Big.png")));
       chip10.setIcon(new ImageIcon(getClass().getResource("images/10Big.png")));
       chip100.setIcon(new ImageIcon(getClass().getResource("images/100Big.png")));
       chip500.setIcon(new ImageIcon(getClass().getResource("images/500BigSelect.png")));
     }
-	else
-	{
-	  actionLabel.setText("Now betting with " + betAmount);
-	}
+    else
+    {
+      actionLabel.setText("Now betting with " + betAmount);
+    }
   }
 
   /** Allows for interacting with all the buttons on the table */
@@ -435,7 +435,7 @@ public class RouletteGUI implements ActionListener
       if (option == 0)
       {
         game = new Roulette();
-		actionLabel.setBounds(1024 / 2 - actionLabel.getPreferredSize().width / 2,
+		    actionLabel.setBounds(1024 / 2 - actionLabel.getPreferredSize().width / 2,
                               85 - actionLabel.getPreferredSize().height / 2,
                               actionLabel.getPreferredSize().width,
                               actionLabel.getPreferredSize().height);
