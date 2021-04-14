@@ -13,8 +13,10 @@ import java.util.Random;
 /** Contains the game logic and holds the player's balance */
 public class Roulette implements java.io.Serializable
 {
-  private int balance;    // The player's balance
-  private int num;        // The number that the ball landed on
+  private int balance;     // The player's current balance
+  private int oldBalance;  // The balance of the player before a round
+  private int num;         // The number that the ball landed on
+  private int earnings;    // How much a player won/lost after a round
   private Random random;
 
   // betsBool stores true for the bets that the player won. The bets array
@@ -32,7 +34,8 @@ public class Roulette implements java.io.Serializable
   /** Default constructor. Balance is set to 1000 upon starting a new game */
   public Roulette()
   {
-    balance = 1000;
+    balance = oldBalance = 1000;
+    earnings = 0;
     random = new Random();
 
     // Creates and initializes the bets array.
@@ -67,6 +70,14 @@ public class Roulette implements java.io.Serializable
     int winnings = 0;          // Resets the player's winnings
     setBetsFalse();            // Sets any bets that were won to false
     num = random.nextInt(37);  // Determines what number the ball falls on
+    
+    // Calculates the total money the player has before the actual spin
+    oldBalance = balance;
+    for (int i = 0; i < 49; i++)
+    {
+      if (bets[i] > 0)
+        oldBalance += bets[i];
+    }
 
     for(int i = 0; i < 49; i++)
     {
@@ -79,79 +90,80 @@ public class Roulette implements java.io.Serializable
       // Checks for win on 1st column
       if(bets[i] != 0 && i == 37 && ((num % 3) - 1) == 0)
       {
-        betsBool[37] = true;
-        winnings += (bets[37] * 2);
+        betsBool[i] = true;
+        winnings += (bets[i] * 2);
       }
       // Checks for win on 2nd column
       if(bets[i] != 0 && i == 38 &&  ((num % 3) - 2) == 0)
       {
-        betsBool[38] = true;
-        winnings += (bets[38] * 2);
+        betsBool[i] = true;
+        winnings += (bets[i] * 2);
       }
       // Checks for win on 3rd column
       if(bets[i] != 0 && i == 39 && (num % 3) == 0)
       {
-        betsBool[39] = true;
-        winnings += (bets[39] * 2);
+        betsBool[i] = true;
+        winnings += (bets[i] * 2);
       }
       // Checks for win on first dozen
       if(bets[i] != 0 && i == 40 && num > 0 && num <= 12)
       {
-        betsBool[40] = true;
-        winnings += (bets[40] * 2);
+        betsBool[i] = true;
+        winnings += (bets[i] * 2);
       }
       // Checks for win on middle dozen
       if(bets[i] != 0 && i == 41 && num > 12 && num <= 24)
       {
-        betsBool[41] = true;
-        winnings += (bets[41] * 2);
+        betsBool[i] = true;
+        winnings += (bets[i] * 2);
       }
       // Checks for win on last dozen
       if(bets[i] != 0 && i == 42 && num > 24 && num <= 36)
       {
-        betsBool[42] = true;
-        winnings += (bets[42] * 2);
+        betsBool[i] = true;
+        winnings += (bets[i] * 2);
       }
       // Checks for win on first half
       if(bets[i] != 0 && i == 43 && num > 0 && num <= 18)
       {
-        betsBool[43] = true;
-        winnings += (bets[43]);
+        betsBool[i] = true;
+        winnings += (bets[i]);
       }
       // Checks for win on second half
       if(bets[i] != 0 && i == 48 && num > 18 && num <= 36)
       {
-        betsBool[48] = true;
-        winnings += (bets[48]);
+        betsBool[i] = true;
+        winnings += (bets[i]);
       }
       // Checks for win on evens
       if(bets[i] != 0 && i == 44 && (num % 2) == 0 && num != 0)
       {
-        betsBool[44] = true;
-        winnings += (bets[44]);
+        betsBool[i] = true;
+        winnings += (bets[i]);
       }
       // Checks for win on odds
       if(bets[i] != 0 && i == 47 && ((num % 2) - 1) == 0)
       {
-        betsBool[47] = true;
-        winnings += (bets[47]);
+        betsBool[i] = true;
+        winnings += (bets[i]);
       }
       // Checks for win on reds
       if(bets[i] != 0 && i == 45 && red(num))
       {
-        betsBool[45] = true;
-        winnings += (bets[45]);
+        betsBool[i] = true;
+        winnings += (bets[i]);
       }
       // Checks for win on blacks
       if(bets[i] != 0 && i == 46 && black(num))
       {
-        betsBool[46] = true;
-        winnings += (bets[46]);
+        betsBool[i] = true;
+        winnings += (bets[i]);
       }
     }
 
-    balance += winnings;  // Adds their winnings to their balance
     clearChips();         // Clears losing chips
+    balance += winnings;  // Adds their winnings to their balance
+    calcEarnings();       // Determines the net gain/loss
     return num;
   }
 
@@ -216,6 +228,43 @@ public class Roulette implements java.io.Serializable
   {
     return balance;
   }
+  
+  /** Calculates the total bets amount on the table */
+  public int getTotalBets()
+  {
+    int totalBets = 0;
+
+    for (int i = 0; i < 49; i++)
+      totalBets += bets[i];
+
+    return totalBets;
+  }
+
+  /** Returns the net gained/lost after a round */
+  public int getEarnings()
+  {
+    return earnings;
+  }
+
+  /** Calculates how much the player earned/lost after a round */
+  private void calcEarnings()
+  {
+    int totalBalance = balance;
+    
+    // Adds any chips the player still has on the board
+    for (int i = 0; i < 49; i++)
+    {
+      if (bets[i] > 0)
+      totalBalance += bets[i];
+    }
+
+    // Determines net gain from any winning bets
+    earnings = 0;
+    if (totalBalance > oldBalance)
+    earnings += totalBalance - oldBalance;  // Player gained money
+    else if (totalBalance < oldBalance)
+    earnings -= oldBalance - totalBalance;  // Player lost money
+  }
 
   /** Sets all boolean bets to false */
   private void setBetsFalse()
@@ -228,16 +277,5 @@ public class Roulette implements java.io.Serializable
   public Boolean isBetTrue(int i)
   {
     return betsBool[i];
-  }
-  
-  /** Calculates the total bets amount on the table */
-  public int getTotalBets()
-  {
-    int totalBets = 0;
-
-    for (int i = 0; i < 49; i++)
-      totalBets += bets[i];
-
-    return totalBets;
   }
 }

@@ -29,7 +29,8 @@ public class RouletteGUI implements ActionListener
   private JPanel contentPane;
   private JLayeredPane layeredPane;
   private ImageIcon imageIcon;
-  private JLabel bgLabel, balanceLabel, actionLabel, actionLabelAlt;
+  private JLabel bgLabel, actionLabel, actionLabelAlt;
+  private JLabel balanceLabel, balanceLabelAlt;
 
   // Components for the menu bar
   JMenuBar menuBar;
@@ -94,14 +95,24 @@ public class RouletteGUI implements ActionListener
     // Adds the player balance label
     balanceLabel = new JLabel("Balance: $" + game.getBalance());
     balanceLabel.setPreferredSize(new Dimension(250, 50));
-    balanceLabel.setBounds(824 - balanceLabel.getPreferredSize().width / 2,
+    balanceLabel.setBounds(760 - balanceLabel.getPreferredSize().width / 2,
                            596 - balanceLabel.getPreferredSize().height / 2,
                            balanceLabel.getPreferredSize().width,
                            balanceLabel.getPreferredSize().height);
-    balanceLabel.setHorizontalAlignment(SwingConstants.CENTER);
     balanceLabel.setFont(new Font("Sans Serif", Font.BOLD, 24));
     balanceLabel.setForeground(Color.WHITE);
     layeredPane.add(balanceLabel, Integer.valueOf(1));
+
+    // Adds a JLabel that displays the net gain/loss after a round
+    balanceLabelAlt = new JLabel("");
+    balanceLabelAlt.setPreferredSize(new Dimension(150, 30));
+    balanceLabelAlt.setBounds(920 - balanceLabelAlt.getPreferredSize().width / 2,
+                              596 - balanceLabelAlt.getPreferredSize().height / 2,
+                              balanceLabelAlt.getPreferredSize().width,
+                              balanceLabelAlt.getPreferredSize().height);
+    balanceLabelAlt.setHorizontalAlignment(SwingConstants.CENTER);
+    balanceLabelAlt.setFont(new Font("Sans Serif", Font.BOLD, 24));
+    layeredPane.add(balanceLabelAlt, Integer.valueOf(1));
 
     // Adds the action label to the top of the screen.
     actionLabel = new JLabel("Welcome, place your bets");
@@ -318,6 +329,7 @@ public class RouletteGUI implements ActionListener
     // Resets labels
     actionLabel.setText("");
     actionLabelAlt.setText("");
+    balanceLabelAlt.setText("");
     actionLabelAlt.setForeground(Color.WHITE);
     actionLabel.setBounds(1024 / 2 - actionLabel.getPreferredSize().width / 2,
                           85 - actionLabel.getPreferredSize().height / 2,
@@ -346,6 +358,7 @@ public class RouletteGUI implements ActionListener
     }
     else if(e.getSource() == newGame)
     {
+      clearAction();
       game = new Roulette();
       balanceLabel.setText("Balance: $" + game.getBalance());
     }
@@ -424,8 +437,9 @@ public class RouletteGUI implements ActionListener
       }
     }
 
-    // Updates the balance label
+    // Updates the balance label and displays net gain/loss
     balanceLabel.setText("Balance: $" + game.getBalance());
+    showNetGain();
 
     // Determines if the player has lost the game (ran out of money)
     if (!betWon && game.getBalance() == 0)
@@ -448,6 +462,7 @@ public class RouletteGUI implements ActionListener
         actionLabel.setText("Place your bets");
         actionLabelAlt.setText("");
         balanceLabel.setText("Balance: $" + game.getBalance());
+        balanceLabelAlt.setText("");
       }
       else
       {
@@ -553,6 +568,29 @@ public class RouletteGUI implements ActionListener
     catch(ClassNotFoundException cnf)
     {
       System.out.println("Error: not a valid class");
+    }
+  }
+
+  /** Shows the amount gained/lost and slowly fades out */
+  private void showNetGain()
+  {
+    Integer netGain = game.getEarnings();
+
+    if (netGain > 0)
+    {
+      balanceLabelAlt.setForeground(Color.GREEN);
+      balanceLabelAlt.setText("+$" + netGain);
+    }
+    else if (netGain < 0)
+    {
+      netGain = Math.abs(netGain);
+      balanceLabelAlt.setForeground(Color.RED);
+      balanceLabelAlt.setText("-$" + netGain.toString());
+    }
+    else
+    {
+      balanceLabelAlt.setForeground(Color.WHITE);
+      balanceLabelAlt.setText("+$0");
     }
   }
 
