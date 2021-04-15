@@ -95,7 +95,7 @@ public class RouletteGUI implements ActionListener
     // Adds the player balance label
     balanceLabel = new JLabel("Balance: $" + game.getBalance());
     balanceLabel.setPreferredSize(new Dimension(250, 50));
-    balanceLabel.setBounds(760 - balanceLabel.getPreferredSize().width / 2,
+    balanceLabel.setBounds(719 - balanceLabel.getPreferredSize().width / 2,
                            596 - balanceLabel.getPreferredSize().height / 2,
                            balanceLabel.getPreferredSize().width,
                            balanceLabel.getPreferredSize().height);
@@ -106,7 +106,7 @@ public class RouletteGUI implements ActionListener
     // Adds a JLabel that displays the net gain/loss after a round
     balanceLabelAlt = new JLabel("");
     balanceLabelAlt.setPreferredSize(new Dimension(150, 30));
-    balanceLabelAlt.setBounds(920 - balanceLabelAlt.getPreferredSize().width / 2,
+    balanceLabelAlt.setBounds(878 - balanceLabelAlt.getPreferredSize().width / 2,
                               596 - balanceLabelAlt.getPreferredSize().height / 2,
                               balanceLabelAlt.getPreferredSize().width,
                               balanceLabelAlt.getPreferredSize().height);
@@ -216,10 +216,10 @@ public class RouletteGUI implements ActionListener
     chip500 = new JButton("");
 
     // Sets their positions
-    chip1.setBounds(0,598,100,100);
-    chip10.setBounds(100,598,100,100);
-    chip100.setBounds(200,598,100,100);
-    chip500.setBounds(300,598,100,100);
+    chip1.setBounds(42,598,100,100);
+    chip10.setBounds(142,598,100,100);
+    chip100.setBounds(242,598,100,100);
+    chip500.setBounds(342,598,100,100);
 
     // Sets the button properties
     chip1.setIcon(new ImageIcon(getClass().getResource("images/1BigSelect.png")));
@@ -257,12 +257,12 @@ public class RouletteGUI implements ActionListener
 
     // Sets the button properties
     spin.setIcon(new ImageIcon(getClass().getResource("images/spin.png")));
-    spin.setBounds(824,628,200,100);
+    spin.setBounds(782,628,200,100);
     spin.setBorderPainted(false);
     spin.setContentAreaFilled(false);
     spin.setBorderPainted(false);
     clear.setIcon(new ImageIcon(getClass().getResource("images/clear.png")));
-    clear.setBounds(624,628,200,100);
+    clear.setBounds(582,628,200,100);
     clear.setBorderPainted(false);
     clear.setContentAreaFilled(false);
     clear.setBorderPainted(false);
@@ -368,7 +368,9 @@ public class RouletteGUI implements ActionListener
       loadAction();
     else if(e.getSource() == howTo)
     {
-
+      ImageIcon howToImage = new ImageIcon(getClass().getResource("images/HowTo.png"));
+      JLabel howToPlay = new JLabel(howToImage);
+      JOptionPane.showMessageDialog(contentPane, howToPlay, "How To Play", JOptionPane.PLAIN_MESSAGE, null);
     }
     else
     {
@@ -387,14 +389,22 @@ public class RouletteGUI implements ActionListener
 
   private void saveAction()
   {
-    String username = JOptionPane.showInputDialog("What is your username?");
-    saveAcct(username);
+    String username = JOptionPane.showInputDialog(contentPane,
+                                                  "Enter your username",
+                                                  "Save Game",
+                                                  1);
+    if(username != null);
+      saveAcct(username);
   }
 
   private void loadAction()
   {
-    String username = JOptionPane.showInputDialog("What is your username?");
-    loadAcct(username);
+    String username = JOptionPane.showInputDialog(contentPane,
+                                                  "Enter your username",
+                                                  "Load Game",
+                                                  1);
+    if(username != null);
+      loadAcct(username);
   }
 
   /** Simulates the ball landing on a random number */
@@ -563,7 +573,6 @@ public class RouletteGUI implements ActionListener
     catch(IOException iox)
     {
       System.out.println("Error: That is not a valid username");
-      iox.printStackTrace();
     }
     catch(ClassNotFoundException cnf)
     {
