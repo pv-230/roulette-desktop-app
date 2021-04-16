@@ -255,12 +255,12 @@ public class RouletteGUI implements ActionListener
     clear = new JButton("");
 
     // Sets the button properties
-    spin.setIcon(new ImageIcon(getClass().getResource("images/spin.png")));
+    spin.setIcon(new ImageIcon(getClass().getResource("images/Spin.png")));
     spin.setBounds(782,628,200,100);
     spin.setBorderPainted(false);
     spin.setContentAreaFilled(false);
     spin.setBorderPainted(false);
-    clear.setIcon(new ImageIcon(getClass().getResource("images/clear.png")));
+    clear.setIcon(new ImageIcon(getClass().getResource("images/Clear.png")));
     clear.setBounds(582,628,200,100);
     clear.setBorderPainted(false);
     clear.setContentAreaFilled(false);
@@ -567,8 +567,8 @@ public class RouletteGUI implements ActionListener
   /** Serializes a player's game */
   void saveAcct(String username)
   {
-    String fileLocation = "../Accounts/" + username + ".txt";
-    File dir = new File("../Accounts");
+    String fileLocation = "./Accounts/" + username + ".txt";
+    File dir = new File("./Accounts");
     if(!dir.exists())
       dir.mkdir();
     try
@@ -594,7 +594,7 @@ public class RouletteGUI implements ActionListener
   /** Loads a player's game */
   void loadAcct(String username)
   {
-    String fileLocation = "../Accounts/" + username + ".txt";
+    String fileLocation = "./Accounts/" + username + ".txt";
     try
     {
       FileInputStream file = new FileInputStream(fileLocation);
