@@ -198,7 +198,7 @@ public class RouletteGUI implements ActionListener
       xpos += 90;
     }
 
-    // Adds all the table buttons
+    // Adds all the table buttons to the layeredPane
     for(int i = 0; i < 49; i++)
     {
       layeredPane.add(buttons[i], Integer.valueOf(1));
@@ -419,16 +419,14 @@ public class RouletteGUI implements ActionListener
   /** Allows a player to start a new game */
   private void newGameAction()
   {
-    int option;
-
-    option = JOptionPane.showOptionDialog(contentPane,
-                                            new JLabel("Are you sure?", JLabel.CENTER),
-                                            "New game",
-                                            JOptionPane.YES_NO_OPTION,
-                                            JOptionPane.PLAIN_MESSAGE,
-                                            null,
-                                            null,
-                                            null);
+    int option = JOptionPane.showOptionDialog(contentPane,
+                                              new JLabel("Are you sure?", JLabel.CENTER),
+                                              "New game",
+                                              JOptionPane.YES_NO_OPTION,
+                                              JOptionPane.PLAIN_MESSAGE,
+                                              null,
+                                              null,
+                                              null);
 
     if (option == 0)
     {
@@ -569,21 +567,26 @@ public class RouletteGUI implements ActionListener
   /** Serializes a player's game */
   void saveAcct(String username)
   {
-    String fileLocation = "./Accounts/" + username + ".txt";
+    String fileLocation = "../Accounts/" + username + ".txt";
+    File dir = new File("../Accounts");
+    if(!dir.exists())
+      dir.mkdir();
     try
     {
       File acctFile = new File(fileLocation);
       acctFile.createNewFile();
       FileOutputStream file = new FileOutputStream(fileLocation);
       ObjectOutputStream acctOut = new ObjectOutputStream(file);
+      // Writes the serialized object
       acctOut.writeObject(game);
       resetLabels("Profile saved");
+      // Closes the files
       acctOut.close();
       file.close();
     }
     catch(IOException iox)
     {
-      iox.printStackTrace();
+      resetLabels("Invalid username");
     }
 
   }
@@ -591,13 +594,17 @@ public class RouletteGUI implements ActionListener
   /** Loads a player's game */
   void loadAcct(String username)
   {
-    String fileLocation = "./Accounts/" + username + ".txt";
+    String fileLocation = "../Accounts/" + username + ".txt";
     try
     {
       FileInputStream file = new FileInputStream(fileLocation);
       ObjectInputStream acctIn = new ObjectInputStream(file);
+      // Reads in the serialized object
       game = (Roulette) acctIn.readObject();
+      // Clears any bets off the table
+      clearAction();
       resetLabels("Welcome back, place your bets");
+      // Closes the files
       acctIn.close();
       file.close();
     }
