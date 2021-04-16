@@ -261,9 +261,9 @@ public class Roulette implements java.io.Serializable
     // Determines net gain from any winning bets
     earnings = 0;
     if (totalBalance > oldBalance)
-    earnings += totalBalance - oldBalance;  // Player gained money
+      earnings += totalBalance - oldBalance;  // Player gained money
     else if (totalBalance < oldBalance)
-    earnings -= oldBalance - totalBalance;  // Player lost money
+      earnings -= oldBalance - totalBalance;  // Player lost money
   }
 
   /** Sets all boolean bets to false */
