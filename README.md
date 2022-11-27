@@ -1,4 +1,4 @@
-## Overview
+# Roulette Desktop Application
 This version of Roulette allows the player to place a bet of $1, $10, $100,
 or $500 on numbers 0-36. Additionally, the standard "outside" bets are
 featured as well that allow a player to bet on even numbers, odd numbers,
